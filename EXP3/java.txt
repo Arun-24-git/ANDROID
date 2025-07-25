@@ -1,0 +1,72 @@
+package com.example.simplecalculator;
+
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.view.View;
+
+public class MainActivity extends AppCompatActivity {
+
+    EditText num1EditText, num2EditText;
+    Button addBtn, subBtn, mulBtn, divBtn;
+    TextView resultTextView;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        num1EditText = findViewById(R.id.editTextText4);
+        num2EditText = findViewById(R.id.editTextText5);
+        resultTextView = findViewById(R.id.textView2);
+        addBtn = findViewById(R.id.button13);
+        subBtn = findViewById(R.id.button14);
+        mulBtn = findViewById(R.id.button15);
+        divBtn = findViewById(R.id.button16);
+
+        addBtn.setOnClickListener(v -> calculate('+'));
+        subBtn.setOnClickListener(v -> calculate('-'));
+        mulBtn.setOnClickListener(v -> calculate('*'));
+        divBtn.setOnClickListener(v -> calculate('/'));
+    }
+
+    private void calculate(char operator) {
+        String s1 = num1EditText.getText().toString().trim();
+        String s2 = num2EditText.getText().toString().trim();
+
+        if (s1.isEmpty() || s2.isEmpty()) {
+            resultTextView.setText("Please enter both numbers");
+            resultTextView.setVisibility(View.VISIBLE);
+            return;
+        }
+
+        try {
+            double num1 = Double.parseDouble(s1);
+            double num2 = Double.parseDouble(s2);
+            double result = 0;
+
+            switch (operator) {
+                case '+': result = num1 + num2; break;
+                case '-': result = num1 - num2; break;
+                case '*': result = num1 * num2; break;
+                case '/':
+                    if (num2 == 0) {
+                        resultTextView.setText("Cannot divide by zero");
+                        resultTextView.setVisibility(View.VISIBLE);
+                        return;
+                    }
+                    result = num1 / num2;
+                    break;
+            }
+
+            resultTextView.setText("Result: " + result);
+            resultTextView.setVisibility(View.VISIBLE);
+
+        } catch (NumberFormatException e) {
+            resultTextView.setText("Invalid input");
+            resultTextView.setVisibility(View.VISIBLE);
+        }
+    }
+}
